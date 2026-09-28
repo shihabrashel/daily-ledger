@@ -1,0 +1,22 @@
+{
+  "expo": {
+    "name": "DailyLedger",
+    "slug": "daily-ledger",
+    "version": "1.0.0",
+    "scheme": "dailyledger",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "plugins": [
+      "expo-router",
+      "expo-status-bar",
+      "expo-sharing"
+    ],
+    "android": {
+      "package": "com.dailyledger.app",
+      "allowBackup": false
+    },
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
