@@ -112,7 +112,7 @@ npx eas-cli@latest build --platform android --profile production
 - Uninstalling/clearing app data removes the ledger and reports. Android automatic backup is disabled. Export separate copies.
 - Local app storage is not an encrypted vault. No backup/restore or synchronization.
 - Email is a local preference; recipients are chosen in the receiving sharing app. No automatic delivery or embedded credentials.
-- Dates use the device's local calendar and `YYYY-MM-DD` entry. Changing the device clock changes month eligibility.
+- Dates use a native picker constrained to the open month and today, with localized display and `YYYY-MM-DD` storage. Android's native calendar uses the device locale. Changing the device clock changes month eligibility.
 - Native PDF rendering, Bangla shaping, sharing, and reboot persistence require device/emulator verification. A bundle check does not establish Play Store readiness.
 - A failed report attempt can leave an unreferenced partial file; it never authorizes deleting transactions.
 - The initial audit reported 14 moderate transitive findings in Expo's tree (Xcode/UUID and URL decoding), no high/critical findings. Do not force an SDK downgrade via `npm audit fix --force`; recheck upstream fixes before release.

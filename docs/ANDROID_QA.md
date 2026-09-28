@@ -17,4 +17,6 @@ Run on a physical Android device and/or emulator before release. These checks su
 13. Simulate low disk space, missing report files, unavailable sharing, and corrupt JSON in a test harness. Errors must preserve transactions and never silently reset data.
 14. Check large font scaling, TalkBack labels, keyboard scrolling, back navigation, light/dark contrast, and narrow displays.
 
+Transaction form checks: open the calendar by tapping either the date or its icon; cancel and confirm the value stays unchanged. Verify today is the Add default and Edit preserves its existing date. Check the category sheet scrolls and dismisses through selection, backdrop, and Android Back. Re-selecting the current type must preserve the category; changing type clears an incompatible category and hides/clears necessity for income. Test Bangla digit entry, decimal input, and reaching Save/Update while the keyboard is open on a small screen. Verify Edit's secondary Delete action still requires confirmation. Check the native calendar under both Android system themes, and the form/category sheet under all app themes.
+
 Use disposable data for destructive checks; never corrupt a real user's ledger or change their device clock.

@@ -1,5 +1,12 @@
 {
   "appName": "DailyLedger",
+  "transactionForm": {
+    "subtitle": "Record your income or expense", "type": "Transaction type",
+    "typeRequired": "Choose income or expense.", "selectCategory": "Select category",
+    "selectDate": "Select date", "datePickerError": "The date picker couldn't open. Please try again.",
+    "amountPlaceholder": "0.00", "notePlaceholder": "Add a note…",
+    "save": "Save transaction", "update": "Update transaction"
+  },
   "tagline": "A little clarity, every day.",
   "intro": "Track your daily income and expenses and understand where your money goes.",
   "dashboard": "Overview", "transactions": "Transactions", "reports": "Reports", "settings": "Settings",

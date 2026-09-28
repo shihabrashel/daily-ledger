@@ -1,5 +1,5 @@
 import React from 'react';
-import { ActivityIndicator, Pressable, ScrollView, Text, TextInput, View, type TextInputProps } from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, Platform, Pressable, ScrollView, Text, TextInput, View, type TextInputProps } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '@/theme';
 
@@ -7,10 +7,12 @@ export function Label({ children, muted = false, size = 16, bold = false }: Reac
   const { colors } = useTheme();
   return <Text style={{ color: muted ? colors.muted : colors.text, fontSize: size, fontWeight: bold ? '700' : '400', lineHeight: size * 1.5 }}>{children}</Text>;
 }
-export function Screen({ children }: React.PropsWithChildren) {
+export function Screen({ children, keyboardAvoiding = false }: React.PropsWithChildren<{ keyboardAvoiding?: boolean }>) {
   const { colors } = useTheme();
-  return <SafeAreaView edges={['top', 'left', 'right']} style={{ flex: 1, backgroundColor: colors.background }}>
-    <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ padding: 22, paddingBottom: 40, gap: 20, maxWidth: 680, width: '100%', alignSelf: 'center' }}>{children}</ScrollView>
+  return <SafeAreaView edges={keyboardAvoiding ? ['top', 'bottom', 'left', 'right'] : ['top', 'left', 'right']} style={{ flex: 1, backgroundColor: colors.background }}>
+    <KeyboardAvoidingView style={{ flex: 1 }} enabled={keyboardAvoiding} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <ScrollView keyboardShouldPersistTaps="handled" keyboardDismissMode={keyboardAvoiding ? 'on-drag' : 'none'} contentContainerStyle={{ padding: 22, paddingBottom: 40, gap: 20, maxWidth: 680, width: '100%', alignSelf: 'center' }}>{children}</ScrollView>
+    </KeyboardAvoidingView>
   </SafeAreaView>;
 }
 export function Card({ children }: React.PropsWithChildren) {

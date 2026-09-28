@@ -8,5 +8,5 @@ export default function NewTransaction() {
   const { t } = useTranslation();
   const { ledger, todayMonth, settings } = useApp();
   if (!settings.onboardingCompleted) return <Redirect href="/onboarding" />;
-  return <Screen><Label bold size={28}>{t('add')}</Label>{ledger?.activeMonth === todayMonth ? <TransactionForm /> : <MonthNotice />}</Screen>;
+  return <Screen keyboardAvoiding><Label bold size={28}>{t('add')}</Label><Label muted>{t('transactionForm.subtitle')}</Label>{ledger?.activeMonth === todayMonth ? <TransactionForm /> : <MonthNotice />}</Screen>;
 }

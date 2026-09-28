@@ -16,10 +16,14 @@ export const reportService = new ReportService({
     const directory = new Directory(Paths.document, 'reports');
     directory.create({ idempotent: true, intermediates: true });
     const { html, workbook } = reportContent(month, state.transactions, language, i18n.getFixedT(language));
-    const pdfResult = await printToFileAsync({ html, width: 842, height: 595 });
-    const pdf = new File(directory, `DailyLedger-${month}-${id}.pdf`);
-    new File(pdfResult.uri).copy(pdf);
-    const excel = new File(directory, `DailyLedger-${month}-${id}.xlsx`);
+    // Print owns its temporary URI; it may sit outside FileSystem's scoped roots
+    // in Expo Go. Transfer PDF data instead of copying that inaccessible path.
+    const pdfResult = await printToFileAsync({ html, width: 842, height: 595, base64: true });
+    if (!pdfResult.base64) throw new Error('errors.report');
+    const pdf = new File(directory, `Daily Ledger-${month}-${id}.pdf`);
+    pdf.create();
+    pdf.write(pdfResult.base64, { encoding: 'base64' });
+    const excel = new File(directory, `Daily Ledger-${month}-${id}.xlsx`);
     const bytes: ArrayBuffer = XLSX.write(workbook, { type: 'array', bookType: 'xlsx' });
     excel.create();
     excel.write(new Uint8Array(bytes));
@@ -32,7 +36,8 @@ export const reportService = new ReportService({
     const [pdfBytes, excelBytes] = await Promise.all([pdf.bytes(), excel.bytes()]);
     if (String.fromCharCode(...pdfBytes.slice(0, 5)) !== '%PDF-' || excelBytes[0] !== 0x50 || excelBytes[1] !== 0x4b) throw new Error('errors.report');
     const workbook = XLSX.read(excelBytes, { type: 'array' });
-    if (!workbook.SheetNames.includes('DailyLedger')) throw new Error('errors.report');
+    // Retained reports from older releases remain valid.
+    if (!workbook.SheetNames.some(name => name === 'Daily Ledger' || name === 'DailyLedger')) throw new Error('errors.report');
   },
   async share(uri, format) {
     if (!new File(uri).exists || !await isAvailableAsync()) throw new Error('errors.share');

@@ -19,8 +19,8 @@ export default function TransactionDetails() {
       void deleteTransaction(id).then(() => router.back()).catch(() => Alert.alert(t('errors.title'), t('errors.storage'))).finally(() => setBusy(false));
     } },
   ]);
-  return <Screen><Label bold size={28}>{t(editing ? 'edit' : 'details')}</Label>
-    {!item ? <Label>{t('errors.missing')}</Label> : editing ? <TransactionForm transaction={item} /> : <>
+  return <Screen keyboardAvoiding><Label bold size={28}>{t(editing ? 'edit' : 'details')}</Label>
+    {!item ? <Label>{t('errors.missing')}</Label> : editing ? <TransactionForm transaction={item} onDelete={remove} busy={busy} /> : <>
       <Card><Label muted>{item.date} · {t(item.type)}</Label><Label bold size={30}>{currency(item.amount, i18n.language)}</Label>
         <Label bold>{t(`categories.${item.categoryId}`)}</Label>{item.necessity && <Label>{t(item.necessity)}</Label>}{item.description && <Label>{item.description}</Label>}</Card>
       <Button title={t('edit')} disabled={busy || !ledger || ledger.activeMonth > todayMonth} onPress={() => setEditing(true)} />
