@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { validDate } from '@/utils/date';
 import { categoriesFor } from '@/constants/categories';
+import { CURRENCY_CODES, DEFAULT_CURRENCY } from '@/constants/currencies';
 
 const month = z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/);
 const transaction = z.object({
@@ -15,13 +16,15 @@ const transaction = z.object({
 export const settingsSchema = z.object({
   email: z.union([z.literal(''), z.email()]), language: z.enum(['en', 'bn']),
   theme: z.enum(['system', 'light', 'dark']), onboardingCompleted: z.boolean(),
+  currency: z.enum(CURRENCY_CODES).default(DEFAULT_CURRENCY),
 });
 export type Settings = z.infer<typeof settingsSchema>;
-export const defaultSettings: Settings = { email: '', language: 'en', theme: 'system', onboardingCompleted: false };
+export const defaultSettings: Settings = { email: '', language: 'en', theme: 'system', onboardingCompleted: false, currency: DEFAULT_CURRENCY };
 
 export const reportSchema = z.object({
   id: z.string().uuid(), month, pdfUri: z.string().min(1), excelUri: z.string().min(1),
   revision: z.number().int().nonnegative(), createdAt: z.iso.datetime(), closed: z.boolean(),
+  currency: z.enum(CURRENCY_CODES).optional(),
 });
 export type SavedReport = z.infer<typeof reportSchema>;
 export const ledgerSchema = z.object({

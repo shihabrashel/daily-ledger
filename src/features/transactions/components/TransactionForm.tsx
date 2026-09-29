@@ -14,6 +14,8 @@ import { DatePickerField } from './DatePickerField';
 import { CategorySelect } from './CategorySelect';
 import { CurrencyInput } from './CurrencyInput';
 import { FieldError, SegmentedControl } from './FormControls';
+import { selectionForType } from '../services/formRules';
+import { userErrorKey } from '@/utils/errors';
 
 export function TransactionForm({ transaction, onDelete, busy = false }: { transaction?: Transaction; onDelete?(): void; busy?: boolean }) {
   const { ledger, saveTransaction } = useApp();
@@ -30,7 +32,7 @@ export function TransactionForm({ transaction, onDelete, busy = false }: { trans
   const disabled = isSubmitting || busy;
   const save = handleSubmit(async values => {
     try { await saveTransaction(values, transaction?.id); router.back(); }
-    catch (error) { Alert.alert(t('errors.title'), t(error instanceof Error && error.message.startsWith('errors.') ? error.message : 'errors.storage')); }
+    catch (error) { Alert.alert(t('errors.title'), t(userErrorKey(error, 'errors.storage'))); }
   });
   return <View style={{ gap: 24 }}>
     <Controller control={control} name="type" render={({ field, fieldState }) => <SegmentedControl
@@ -40,17 +42,16 @@ export function TransactionForm({ transaction, onDelete, busy = false }: { trans
       onChange={value => {
         if (value === field.value) return;
         field.onChange(value);
-        if (!categoriesFor(value).includes(getValues('categoryId'))) {
-          setValue('categoryId', '', { shouldDirty: true });
-          clearErrors('categoryId');
-        }
-        if (value === 'income') { setValue('necessity', undefined, { shouldDirty: true }); clearErrors('necessity'); }
+        const next = selectionForType(value, getValues('categoryId'), getValues('necessity'));
+        setValue('categoryId', next.categoryId, { shouldDirty: true });
+        setValue('necessity', next.necessity, { shouldDirty: true });
+        clearErrors(['categoryId', 'necessity']);
       }} />} />
     <Controller control={control} name="date" render={({ field, fieldState }) => <DatePickerField
       value={field.value} month={ledger!.activeMonth} onChange={field.onChange} disabled={disabled}
       error={fieldState.error?.message && t(fieldState.error.message)} />} />
     <Controller control={control} name="categoryId" render={({ field, fieldState }) => <CategorySelect
-      value={field.value} type={type} onChange={field.onChange} disabled={disabled}
+      value={field.value} categories={categoriesFor(type)} onChange={field.onChange} disabled={disabled}
       error={fieldState.error ? t('validation.category') : undefined} />} />
     <Controller control={control} name="amount" render={({ field, fieldState }) => <CurrencyInput
       ref={field.ref} value={field.value} onChange={field.onChange} onBlur={field.onBlur} disabled={disabled}

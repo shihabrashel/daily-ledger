@@ -9,13 +9,13 @@ import { reportContent } from './content';
 import { ReportService } from './ReportService';
 
 export const reportService = new ReportService({
-  async create(month, state, language) {
+  async create(month, state, language, currency) {
     ledgerSchema.parse(state);
     if (state.activeMonth !== month) throw new Error('errors.staleReport');
     const id = randomUUID();
     const directory = new Directory(Paths.document, 'reports');
     directory.create({ idempotent: true, intermediates: true });
-    const { html, workbook } = reportContent(month, state.transactions, language, i18n.getFixedT(language));
+    const { html, workbook } = reportContent(month, state.transactions, language, i18n.getFixedT(language), currency);
     // Print owns its temporary URI; it may sit outside FileSystem's scoped roots
     // in Expo Go. Transfer PDF data instead of copying that inaccessible path.
     const pdfResult = await printToFileAsync({ html, width: 842, height: 595, base64: true });
@@ -27,7 +27,7 @@ export const reportService = new ReportService({
     const bytes: ArrayBuffer = XLSX.write(workbook, { type: 'array', bookType: 'xlsx' });
     excel.create();
     excel.write(new Uint8Array(bytes));
-    return { id, month, pdfUri: pdf.uri, excelUri: excel.uri, revision: state.revision, createdAt: new Date().toISOString(), closed: false };
+    return { id, month, currency, pdfUri: pdf.uri, excelUri: excel.uri, revision: state.revision, createdAt: new Date().toISOString(), closed: false };
   },
   async verify(report) {
     const pdf = new File(report.pdfUri);

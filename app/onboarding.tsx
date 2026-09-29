@@ -7,7 +7,7 @@ export default function Onboarding() {
   const { t } = useTranslation();
   const { settings } = useApp();
   if (settings.onboardingCompleted) return <Redirect href="/(tabs)" />;
-  return <Screen><Label bold size={22}>{t('appName')}</Label><Label muted>{t('tagline')}</Label>
+  return <Screen keyboardAvoiding><Label bold size={22}>{t('appName')}</Label><Label muted>{t('tagline')}</Label>
     <Label bold size={34}>{t('welcome')}</Label><Label>{t('intro')}</Label>
     <Card><PreferencesForm onboarding /></Card><Label muted>{t('localNote')}</Label></Screen>;
 }

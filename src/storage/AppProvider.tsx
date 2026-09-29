@@ -8,6 +8,8 @@ import { transactionSchema, type TransactionForm } from '@/features/transactions
 import { closeLedger } from '@/features/reports/closing';
 import i18n from '@/localization';
 import { reportService } from '@/features/reports/nativeReports';
+import { controlledError } from '@/utils/errors';
+import { DEFAULT_CURRENCY } from '@/constants/currencies';
 
 interface AppContextValue {
   ledger: Ledger | null; settings: Settings; loading: boolean; error: string | null; todayMonth: string;
@@ -34,7 +36,7 @@ export function AppProvider({ children }: React.PropsWithChildren) {
       await i18n.changeLanguage(storedSettings.language);
       const storedLedger = await transactionRepository.read();
       state.current = storedLedger; setLedger(storedLedger); setError(null);
-    } catch { setError('errors.storage'); }
+    } catch (error) { setError(controlledError(error, 'errors.storage').key); }
     finally { setLoading(false); }
   }, []);
   // Hydration synchronizes with asynchronous device storage on mount.
@@ -54,14 +56,19 @@ export function AppProvider({ children }: React.PropsWithChildren) {
       const next = await change(state.current);
       await transactionRepository.write(next);
       state.current = next; setLedger(next);
-    });
+    }).catch(error => { throw controlledError(error, 'errors.storage'); });
     queue.current = operation.catch(() => undefined);
     return operation;
   };
   const value: AppContextValue = {
     ledger, settings, loading, error, todayMonth, reload,
-    saveSettings: async next => {
-      await settingsRepository.write(next); setSettings(next); await i18n.changeLanguage(next.language);
+    saveSettings: next => {
+      // Serialize preference changes with closing so a report's currency cannot change mid-close.
+      const operation = queue.current.then(async () => {
+        await settingsRepository.write(next); setSettings(next); await i18n.changeLanguage(next.language);
+      }).catch(error => { throw controlledError(error, 'errors.storage'); });
+      queue.current = operation.catch(() => undefined);
+      return operation;
     },
     saveTransaction: (form, id) => mutate(previous => {
       if ((!id && previous.activeMonth !== currentMonth()) || previous.activeMonth > currentMonth()) throw new Error('errors.monthBlocked');
@@ -79,6 +86,8 @@ export function AppProvider({ children }: React.PropsWithChildren) {
       return { ...previous, reports: [...previous.reports, report] };
     }),
     closeMonth: report => mutate(async previous => {
+      const currentSettings = await settingsRepository.read();
+      if ((report.currency ?? DEFAULT_CURRENCY) !== currentSettings.currency) throw new Error('errors.staleReport');
       await reportService.verify(report);
       return closeLedger(previous, report);
     }),

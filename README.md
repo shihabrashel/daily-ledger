@@ -49,7 +49,7 @@ src/features/settings/       Onboarding/settings form
 src/storage/                 Repository contracts, schemas, app state
 src/localization/locales/    English and Bangla dictionaries
 src/theme/                   System/light/dark colors
-src/utils/                   Calendar and BDT formatting
+src/utils/                   Calendar and currency formatting
 tests/                       Business and report failure tests
 ```
 
@@ -75,7 +75,7 @@ Failure before the final write preserves transactions. Closing on the last day o
 
 ## Localization and reports
 
-All messages and category labels live in `src/localization/locales/en.json` and `bn.json`; tests check matching keys. Currency formatting is centralized for BDT. PDF uses Android's local font fallback for Bangla; verify shaping on target devices. Excel preserves Unicode and needs suitable fonts in the receiving viewer.
+All messages and category labels live in `src/localization/locales/en.json` and `bn.json`; tests check matching keys. Currency formatting is centralized for BDT (default) and USD. Select Currency in Settings, then Save; changing currency with existing transactions requires confirmation and never converts or changes amounts. Existing users without a currency preference default to BDT. Reports record their generation currency; older retained files remain BDT snapshots. See `docs/CURRENCY_SUPPORT.md` for details. PDF uses Android's local font fallback for Bangla; verify shaping on target devices. Excel preserves Unicode and needs suitable fonts in the receiving viewer.
 
 Both reports contain month/year, DailyLedger branding, all five summary totals, transactions, separate expense/income columns, descriptions, necessity, totals, and balance. Excel amounts are numeric; descriptions remain text even when starting with `=`. PDF HTML escapes user content.
 

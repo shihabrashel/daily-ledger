@@ -10,7 +10,7 @@ export function Label({ children, muted = false, size = 16, bold = false }: Reac
 export function Screen({ children, keyboardAvoiding = false }: React.PropsWithChildren<{ keyboardAvoiding?: boolean }>) {
   const { colors } = useTheme();
   return <SafeAreaView edges={keyboardAvoiding ? ['top', 'bottom', 'left', 'right'] : ['top', 'left', 'right']} style={{ flex: 1, backgroundColor: colors.background }}>
-    <KeyboardAvoidingView style={{ flex: 1 }} enabled={keyboardAvoiding} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+    <KeyboardAvoidingView style={{ flex: 1 }} enabled={keyboardAvoiding} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <ScrollView keyboardShouldPersistTaps="handled" keyboardDismissMode={keyboardAvoiding ? 'on-drag' : 'none'} contentContainerStyle={{ padding: 22, paddingBottom: 40, gap: 20, maxWidth: 680, width: '100%', alignSelf: 'center' }}>{children}</ScrollView>
     </KeyboardAvoidingView>
   </SafeAreaView>;

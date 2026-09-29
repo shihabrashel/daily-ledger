@@ -33,14 +33,15 @@ export function SegmentedControl<T extends string>({ label, value, options, onCh
   const { colors } = useTheme();
   return <View style={{ gap: 8 }}>
     <Label bold>{label}</Label>
-    <View accessibilityRole="radiogroup" accessibilityLabel={label} style={{ flexDirection: 'row', padding: 4, gap: 4, borderRadius: 16, backgroundColor: colors.soft }}>
+    <View accessibilityRole="radiogroup" accessibilityLabel={label} style={{ flexDirection: 'row', gap: 12 }}>
       {options.map(option => {
         const selected = option.value === value;
         return <Pressable key={option.value} accessibilityRole="radio" accessibilityLabel={option.label}
-          accessibilityState={{ checked: selected, disabled }} disabled={disabled} onPress={() => onChange(option.value)}
-          style={({ pressed }) => ({ flex: 1, minHeight: 48, padding: 12, borderRadius: 12,
-            alignItems: 'center', justifyContent: 'center', backgroundColor: selected ? colors.primary : 'transparent', opacity: disabled ? 0.5 : pressed ? 0.75 : 1 })}>
-          <Text style={{ fontSize: 16, fontWeight: selected ? '700' : '500', color: selected ? colors.onPrimary : colors.text }}>{option.label}</Text>
+          accessibilityState={{ checked: selected, selected, disabled }} disabled={disabled} onPress={() => onChange(option.value)}
+          style={({ pressed }) => ({ flex: 1, minHeight: 56, padding: 12, borderRadius: 12, borderWidth: 2,
+            borderColor: selected ? colors.primary : colors.border,
+            alignItems: 'center', justifyContent: 'center', backgroundColor: selected ? colors.primary : colors.surface, opacity: disabled ? 0.5 : pressed ? 0.75 : 1 })}>
+          <Text style={{ fontSize: 16, fontWeight: selected ? '700' : '400', color: selected ? colors.onPrimary : colors.text }}>{selected ? '✓ ' : ''}{option.label}</Text>
         </Pressable>;
       })}
     </View>

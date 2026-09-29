@@ -1,5 +1,5 @@
 {
-  "appName": "DailyLedger",
+  "appName": "Daily Ledger",
   "transactionForm": {
     "subtitle": "Record your income or expense", "type": "Transaction type",
     "typeRequired": "Choose income or expense.", "selectCategory": "Select category",
@@ -9,7 +9,7 @@
   },
   "tagline": "A little clarity, every day.",
   "intro": "Track your daily income and expenses and understand where your money goes.",
-  "dashboard": "Overview", "transactions": "Transactions", "reports": "Reports", "settings": "Settings",
+  "dashboard": "Home", "transactions": "Transactions", "reports": "Reports", "settings": "Settings",
   "welcome": "Your money, made simple", "getStarted": "Get started", "skip": "Skip for now",
   "email": "Email address (optional)", "emailHint": "Your email can be used when sharing monthly reports.",
   "localNote": "Private by design. Your data stays on this device.",
@@ -19,7 +19,12 @@
   "totalIncome": "Total income", "totalExpense": "Total expense", "essentialExpense": "Essential expense", "optionalExpense": "Optional expense",
   "recent": "Recent transactions", "viewAll": "View all", "add": "Add transaction", "edit": "Edit transaction", "details": "Transaction details",
   "date": "Date", "dateHint": "YYYY-MM-DD · today or earlier in the open month", "type": "Type", "category": "Category",
-  "amount": "Amount (BDT)", "description": "Description (optional)", "necessity": "Necessity",
+  "amount": "Amount", "description": "Description (optional)", "necessity": "Necessity",
+  "currencies": { "BDT": "Bangladeshi Taka", "USD": "US Dollar" },
+  "currencySettings": {
+    "label": "Currency", "select": "Select currency", "changeTitle": "Change currency?", "change": "Change currency",
+    "warning": "Your existing transaction amounts will not be converted. Only the currency used to display them will change."
+  },
   "essentialHint": "Necessary for daily life: rent, groceries, medicine, and bills.",
   "optionalHint": "Spending you could avoid: entertainment, snacks, and optional shopping.",
   "delete": "Delete transaction", "deleteWarning": "Delete this transaction? This cannot be undone.",
@@ -27,7 +32,7 @@
   "noMatches": "No transactions match these filters.", "openMonth": "Open month", "currentMonth": "Current month",
   "stillOpen": "{{month}} is still open.", "mustClose": "Close the previous month before adding transactions for {{month}}.",
   "nextMonth": "Your month is closed. You can add transactions when {{month}} begins.",
-  "summary": "{{month}} summary", "generate": "Generate PDF & Excel", "generating": "Preparing your reports…",
+  "summary": "{{month}} summary", "generate": "Generate PDF & Excel", "generating": "Generating reports…",
   "close": "Close {{month}}", "closeWarning": "Closing {{month}} will generate your monthly reports and clear {{month}} transactions from this device. This cannot be undone.",
   "finalWarning": "Both reports are saved on this device. Export them now to keep a separate copy. Closing permanently clears this month's transactions. Have you saved what you need?",
   "confirmClose": "Yes, close this month", "closeAvailable": "Month closing is available on the last day of the month or later. You can generate reports at any time.",
@@ -36,6 +41,18 @@
   "reportHint": "Reports are retained on this device. Share a copy to keep it safe if the app is removed.",
   "closed": "Closed", "snapshot": "Report snapshot", "total": "Total", "about": "About", "version": "Version {{version}}",
   "validation": { "email": "Enter a valid email or leave it empty.", "date": "Enter a real date in YYYY-MM-DD format.", "future": "Future dates are not allowed.", "month": "Choose a date in the open month.", "category": "Choose a category for this transaction type.", "amount": "Enter an amount greater than zero, up to 999,999,999.99, with at most two decimal places.", "description": "Keep the description within 500 characters.", "necessity": "Choose essential or optional." },
-  "errors": { "title": "Something needs attention", "storage": "We couldn't read or save your local data. Existing data has not been reset. Please retry. If this continues, preserve the app data and contact support.", "generic": "The action could not be completed. Please try again.", "report": "Reports could not be generated. Your transactions are still safe. Please retry.", "share": "The report could not be shared. Check that the file and a sharing app are available.", "monthBlocked": "Close the previous month before adding new transactions, or wait until the next open month begins.", "missing": "This transaction is no longer available.", "staleReport": "Transactions have changed. Generate fresh reports before closing.", "closeTooEarly": "You can close this month on its last day or later." },
-  "categories": { "groceries": "Groceries / Bazar", "rent": "House rent", "food": "Food", "medicine": "Medicine", "transport": "Transport", "utilities": "Utility bills", "education": "Education", "donation": "Donation", "family": "Family", "shopping": "Shopping", "entertainment": "Entertainment", "snacks": "Snacks", "otherExpense": "Other expense", "salary": "Salary", "freelance": "Freelance", "business": "Business", "bonus": "Bonus", "gift": "Gift", "investment": "Investment", "otherIncome": "Other income" }
+  "errors": { "title": "Something needs attention", "storage": "We couldn't read or save your local data. Existing data has not been reset. Please retry. If this continues, preserve the app data and contact support.", "generic": "The action could not be completed. Please try again.", "report": "Unable to generate the report. Please try again.", "share": "The report could not be shared. Check that the file and a sharing app are available.", "monthBlocked": "Close the previous month before adding new transactions, or wait until the next open month begins.", "missing": "This transaction is no longer available.", "staleReport": "Transactions have changed. Generate fresh reports before closing.", "closeTooEarly": "You can close this month on its last day or later." },
+  "categories": {
+    "groceries": "Groceries / Bazar", "foodDining": "Food & Dining", "snacksDrinks": "Snacks & Drinks",
+    "medicalHealthcare": "Medical & Healthcare", "houseRent": "House Rent", "electricity": "Electricity",
+    "gas": "Gas", "internet": "Internet", "phoneMobile": "Phone & Mobile", "transportation": "Transportation",
+    "bike": "Bike", "car": "Car", "education": "Education", "donationCharity": "Donation & Charity",
+    "familyPersonal": "Family & Personal", "subscriptions": "Subscriptions", "electronicsService": "Electronics & Service",
+    "furnitureHousehold": "Furniture & Household", "serviceCharge": "Service Charge", "festival": "Festival",
+    "travelTour": "Travel & Tour", "taxProfessional": "Tax & Professional", "other": "Other",
+    "salary": "Salary", "freelance": "Freelance", "business": "Business", "bonus": "Bonus", "gift": "Gift", "investment": "Investment", "otherIncome": "Other income"
+  },
+  "categorySearch": "Search category…",
+  "noCategories": "No categories found",
+  "reportsGenerated": "Reports generated successfully."
 }

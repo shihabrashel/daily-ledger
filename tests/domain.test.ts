@@ -10,10 +10,10 @@ import bn from '@/localization/locales/bn.json';
 
 const income: Transaction = { id: '588b3406-63d4-4a58-93b9-eecf9d36b3ed', date: '2026-12-01', type: 'income', categoryId: 'salary', amount: 80000, createdAt: '2026-12-01T00:00:00.000Z' };
 const essential: Transaction = { ...income, id: 'f9bc9056-4572-4b64-8d81-c59b825ec2a8', date: '2026-12-02', type: 'expense', categoryId: 'groceries', amount: 39000, necessity: 'essential' };
-const optional: Transaction = { ...essential, id: '8f243647-0c86-4c18-a6d4-54912c42b02a', date: '2026-12-03', categoryId: 'snacks', amount: 8250, necessity: 'optional' };
+const optional: Transaction = { ...essential, id: '8f243647-0c86-4c18-a6d4-54912c42b02a', date: '2026-12-03', categoryId: 'snacksDrinks', amount: 8250, necessity: 'optional' };
 const report: SavedReport = { id: 'c8d0c301-8c9b-46cf-829f-bd1c56c98c20', month: '2026-12', pdfUri: 'file:///report.pdf', excelUri: 'file:///report.xlsx', revision: 3, createdAt: '2026-12-31T00:00:00.000Z', closed: false };
 const state: Ledger = { version: 1, activeMonth: '2026-12', revision: 3, transactions: [income, essential, optional], reports: [report] };
-const form = { date: '2026-12-02', type: 'expense' as const, categoryId: 'food', amount: '12.50', description: '', necessity: 'essential' as const };
+const form = { date: '2026-12-02', type: 'expense' as const, categoryId: 'foodDining', amount: '12.50', description: '', necessity: 'essential' as const };
 
 describe('money and filtering', () => {
   it('calculates all five totals', () => expect(summarize(state.transactions)).toEqual({ income: 80000, expense: 47250, balance: 32750, essential: 39000, optional: 8250 }));

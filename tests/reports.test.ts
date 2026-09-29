@@ -14,15 +14,15 @@ describe('report content', () => {
     expect(html).not.toContain('<script>');
     expect(html).toContain('&lt;script&gt;');
     const reloaded = XLSX.read(XLSX.write(workbook, { type: 'array', bookType: 'xlsx' }), { type: 'array' });
-    const rows = XLSX.utils.sheet_to_json<(string | number)[]>(reloaded.Sheets.DailyLedger!, { header: 1 });
+    const rows = XLSX.utils.sheet_to_json<(string | number)[]>(reloaded.Sheets['Daily Ledger']!, { header: 1 });
     expect(rows.find(row => row[0] === '2026-09-01')?.slice(2, 4)).toEqual([12.5, '']);
     expect(rows.find(row => row[0] === 'Total')?.slice(2, 4)).toEqual([12.5, 0]);
   });
   it('preserves Bangla and does not convert user descriptions into formulas', () => {
     const { html, workbook } = reportContent(state.activeMonth, [{ ...state.transactions[0]!, description: '=HYPERLINK("bad")' }], 'bn', i18n.getFixedT('bn'));
     expect(html).toContain('প্রয়োজনীয়');
-    expect(workbook.Sheets.DailyLedger?.E10?.t).toBe('s');
-    expect(workbook.Sheets.DailyLedger?.E10?.f).toBeUndefined();
+    expect(workbook.Sheets['Daily Ledger']?.E10?.t).toBe('s');
+    expect(workbook.Sheets['Daily Ledger']?.E10?.f).toBeUndefined();
   });
 });
 describe('report generation failures', () => {
@@ -40,14 +40,14 @@ describe('report generation failures', () => {
   it.each(['create', 'verify'] as const)('does not retain or clear transactions when %s fails', async method => {
     const { files, service, retain } = setup();
     vi.mocked(files[method]).mockRejectedValue(new Error('disk full'));
-    await expect(service.generate(state, 'en', retain)).rejects.toThrow('disk full');
+    await expect(service.generate(state, 'en', retain)).rejects.toThrow('errors.report');
     expect(retain).not.toHaveBeenCalled();
     expect(state.transactions).toHaveLength(1);
   });
   it('propagates persistence failure', async () => {
     const { service, retain } = setup();
     retain.mockRejectedValue(new Error('storage full'));
-    await expect(service.generate(state, 'en', retain)).rejects.toThrow('storage full');
+    await expect(service.generate(state, 'en', retain)).rejects.toThrow('errors.report');
     expect(state.transactions).toHaveLength(1);
   });
   it('propagates sharing failure without clearing anything', async () => {
